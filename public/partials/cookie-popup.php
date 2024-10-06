@@ -1,4 +1,4 @@
-<div id="acp-cookie-popup" class="acp-cookie-popup">
+<div id="acp-cookie-popup" class="acp-cookie-popup acp-position-<?php echo esc_attr($popup_data['popup_position']); ?>">
     <div class="acp-cookie-content">
         <div class="acp-cookie-text">
             <h3 class="acp-cookie-title"><?php echo esc_html($popup_data['title']); ?></h3>

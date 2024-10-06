@@ -2,10 +2,12 @@
 class ACP_Public {
     private $plugin_name;
     private $version;
+    private $option_name;
 
     public function __construct($plugin_name, $version) {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+        $this->option_name = $this->plugin_name . '_settings';
 
         add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
@@ -19,7 +21,7 @@ class ACP_Public {
     public function enqueue_scripts() {
         wp_enqueue_script($this->plugin_name, ACP_PLUGIN_URL . 'public/js/advanced-cookie-plugin-public.js', array('jquery'), $this->version, true);
 
-        $options = get_option($this->plugin_name . '_options');
+        $options = get_option($this->option_name);
         $cookie_expiry = isset($options['cookie_expiry']) ? intval($options['cookie_expiry']) : 30;
 
         wp_localize_script($this->plugin_name, 'acpData', array(
@@ -37,6 +39,7 @@ class ACP_Public {
                 'decline_text' => isset($options['decline_button_text']) ? $options['decline_button_text'] : 'Decline',
                 'policy_text' => isset($options['policy_link_text']) ? $options['policy_link_text'] : 'View Cookie Policy',
                 'policy_url' => isset($options['policy_url']) ? $options['policy_url'] : '#',
+                'popup_position' => isset($options['popup_position']) ? $options['popup_position'] : 'bottom',
             );
             include_once ACP_PLUGIN_DIR . 'public/partials/cookie-popup.php';
         }

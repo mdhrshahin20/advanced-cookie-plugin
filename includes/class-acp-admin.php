@@ -2,10 +2,12 @@
 class ACP_Admin {
     private $plugin_name;
     private $version;
+    private $option_name;
 
     public function __construct($plugin_name, $version) {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+        $this->option_name = $this->plugin_name . '_settings';
         error_log('ACP_Admin initialized');
         add_action('admin_menu', array($this, 'add_plugin_admin_menu'));
         add_action('admin_init', array($this, 'register_settings'));
@@ -43,6 +45,7 @@ class ACP_Admin {
         $this->add_settings_field('policy_link_text', 'Policy Link Text');
         $this->add_settings_field('policy_url', 'Policy URL');
         $this->add_settings_field('cookie_expiry', 'Cookie Expiry (days)', 'number');
+        $this->add_settings_field('popup_position', 'Popup Position', 'select');
     }
 
     private function add_settings_field($id, $label, $type = 'text') {
@@ -69,6 +72,9 @@ class ACP_Admin {
             case 'number':
                 echo '<input type="number" name="' . $this->option_name . '[' . $id . ']" value="' . esc_attr($value) . '" class="small-text">';
                 break;
+            case 'select':
+                $this->popup_position_field_callback($value);
+                break;
             default:
                 echo '<input type="text" name="' . $this->option_name . '[' . $id . ']" value="' . esc_attr($value) . '" class="regular-text">';
         }
@@ -78,7 +84,7 @@ class ACP_Admin {
         $valid = array();
         $fields = array(
             'popup_title', 'cookie_message', 'accept_button_text', 'decline_button_text',
-            'policy_link_text', 'policy_url', 'cookie_expiry'
+            'policy_link_text', 'policy_url', 'cookie_expiry', 'popup_position'
         );
 
         foreach ($fields as $field) {
@@ -94,45 +100,13 @@ class ACP_Admin {
         echo '<p>Configure the settings for your Advanced Cookie Plugin.</p>';
     }
 
-    public function cookie_text_field_callback() {
-        $options = get_option($this->plugin_name . '_settings');
-        $value = isset($options['cookie_text']) ? $options['cookie_text'] : '';
-        echo '<textarea name="' . $this->plugin_name . '_settings[cookie_text]" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
-    }
-
-    public function cookie_expiry_field_callback() {
-        $options = get_option($this->plugin_name . '_settings');
-        $value = isset($options['cookie_expiry']) ? $options['cookie_expiry'] : 30;
-        echo '<input type="number" name="' . $this->plugin_name . '_settings[cookie_expiry]" value="' . esc_attr($value) . '" min="1" max="365">';
-    }
-
-    public function button_text_field_callback() {
-        $options = get_option($this->plugin_name . '_settings');
-        $value = isset($options['button_text']) ? $options['button_text'] : 'Accept';
-        echo '<input type="text" name="' . $this->plugin_name . '_settings[button_text]" value="' . esc_attr($value) . '">';
-    }
-
-    public function popup_position_field_callback() {
-        $options = get_option($this->plugin_name . '_settings');
-        $value = isset($options['popup_position']) ? $options['popup_position'] : 'bottom';
+    public function popup_position_field_callback($value) {
         $positions = array('top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right');
-        echo '<select name="' . $this->plugin_name . '_settings[popup_position]">';
+        echo '<select name="' . $this->option_name . '[popup_position]">';
         foreach ($positions as $position) {
             echo '<option value="' . esc_attr($position) . '" ' . selected($value, $position, false) . '>' . esc_html(ucfirst(str_replace('-', ' ', $position))) . '</option>';
         }
         echo '</select>';
-    }
-
-    public function accept_button_text_callback() {
-        $options = get_option($this->plugin_name . '_settings');
-        $value = isset($options['accept_button_text']) ? $options['accept_button_text'] : 'Accept';
-        echo '<input type="text" name="' . $this->plugin_name . '_settings[accept_button_text]" value="' . esc_attr($value) . '" class="regular-text">';
-    }
-
-    public function decline_button_text_callback() {
-        $options = get_option($this->plugin_name . '_settings');
-        $value = isset($options['decline_button_text']) ? $options['decline_button_text'] : 'Decline';
-        echo '<input type="text" name="' . $this->plugin_name . '_settings[decline_button_text]" value="' . esc_attr($value) . '" class="regular-text">';
     }
 
     public function display_plugin_admin_page() {
