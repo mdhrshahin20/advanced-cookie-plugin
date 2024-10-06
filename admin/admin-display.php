@@ -5,7 +5,7 @@
         settings_fields($this->plugin_name);
         do_settings_sections($this->plugin_name);
         ?>
-        <table class="form-table">
+        <!-- <table class="form-table">
             <tr>
                 <th scope="row">
                     <label for="<?php echo $this->plugin_name; ?>-cookie_text">Cookie Consent Text</label>
@@ -22,7 +22,7 @@
                     <input type="number" name="<?php echo $this->plugin_name; ?>_cookie_expiry" id="<?php echo $this->plugin_name; ?>-cookie_expiry" value="<?php echo esc_attr(get_option($this->plugin_name . '_cookie_expiry', 30)); ?>" class="small-text" min="1">
                 </td>
             </tr>
-        </table>
+        </table> -->
         <?php submit_button('Save Settings'); ?>
     </form>
 </div>
