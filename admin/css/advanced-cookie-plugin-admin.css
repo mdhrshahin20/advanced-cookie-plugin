@@ -1,0 +1,11 @@
+.wrap {
+    max-width: 800px;
+}
+
+.form-table th {
+    width: 250px;
+}
+
+textarea {
+    width: 100%;
+}
