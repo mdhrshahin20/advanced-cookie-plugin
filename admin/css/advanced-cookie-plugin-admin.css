@@ -1,11 +1,112 @@
 .wrap {
-    max-width: 800px;
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .form-table th {
-    width: 250px;
+    width: 200px;
 }
 
 textarea {
     width: 100%;
+}
+
+#acp-admin-preview {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+#acp-admin-preview .acp-cookie-popup {
+    position: relative;
+    display: block;
+}
+
+.acp-admin-container {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
+.acp-settings-form {
+    flex: 0 0 60%;
+    max-width: 60%;
+}
+
+.acp-preview-container {
+    flex: 0 0 35%;
+    max-width: 35%;
+    position: sticky;
+    top: 32px; /* Adjust this value based on your admin bar height */
+    height: calc(100vh - 32px); /* Adjust this value based on your admin bar height */
+    overflow-y: auto;
+}
+
+#acp-cookie-popup {
+    position: relative;
+}
+
+.acp-cookie-content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.acp-cookie-text {
+    flex: 1 1 100%;
+    margin-bottom: 15px;
+}
+
+.acp-cookie-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.acp-button {
+    margin: 5px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.acp-cookie-policy-link {
+    margin: 5px;
+}
+
+#acp-debug-info {
+    background-color: #f0f0f0;
+    padding: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Position classes */
+.acp-position-bottom { bottom: 0; left: 0; right: 0; }
+.acp-position-top { top: 0; left: 0; right: 0; }
+.acp-position-top-left, .acp-position-top-right, 
+.acp-position-bottom-left, .acp-position-bottom-right {
+    max-width: 300px;
+}
+
+/* Add any other styles from your public CSS that are necessary for the preview */
+
+@media screen and (max-width: 1200px) {
+    .acp-admin-container {
+        flex-direction: column;
+    }
+
+    .acp-settings-form,
+    .acp-preview-container {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .acp-preview-container {
+        position: static;
+        height: auto;
+    }
 }

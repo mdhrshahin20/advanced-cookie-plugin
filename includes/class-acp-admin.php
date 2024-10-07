@@ -8,7 +8,6 @@ class ACP_Admin {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         $this->option_name = $this->plugin_name . '_settings';
-        error_log('ACP_Admin initialized');
         add_action('admin_menu', array($this, 'add_plugin_admin_menu'));
         add_action('admin_init', array($this, 'register_settings'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles_scripts'));
@@ -174,5 +173,17 @@ class ACP_Admin {
         }
         wp_enqueue_style($this->plugin_name . '-admin', plugin_dir_url(__FILE__) . '../admin/css/advanced-cookie-plugin-admin.css', array(), $this->version, 'all');
         wp_enqueue_script($this->plugin_name . '-admin', plugin_dir_url(__FILE__) . '../admin/js/advanced-cookie-plugin-admin.js', array('jquery'), $this->version, false);
+    }
+
+    public function enqueue_admin_scripts($hook) {
+        if ($hook != 'settings_page_' . $this->plugin_name) {
+            return;
+        }
+
+        wp_enqueue_style($this->plugin_name . '-admin', plugin_dir_url(__FILE__) . '../admin/css/advanced-cookie-plugin-admin.css', array(), $this->version, 'all');
+        wp_enqueue_script($this->plugin_name . '-admin', plugin_dir_url(__FILE__) . '../admin/js/advanced-cookie-plugin-admin.js', array('jquery'), $this->version, false);
+
+        $options = get_option($this->option_name);
+        wp_localize_script($this->plugin_name . '-admin', 'acpAdminData', $options);
     }
 }
