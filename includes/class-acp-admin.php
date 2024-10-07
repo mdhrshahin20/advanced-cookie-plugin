@@ -46,6 +46,26 @@ class ACP_Admin {
         $this->add_settings_field('policy_url', 'Policy URL');
         $this->add_settings_field('cookie_expiry', 'Cookie Expiry (days)', 'number');
         $this->add_settings_field('popup_position', 'Popup Position', 'select');
+        
+        // New customization fields
+        $this->add_settings_field('banner_bg_color', 'Banner Background Color', 'color');
+        $this->add_settings_field('banner_text_color', 'Banner Text Color', 'color');
+        
+                // New fields for font sizes
+        $this->add_settings_field('heading_font_size', 'Heading Font Size (px)', 'number');
+        $this->add_settings_field('paragraph_font_size', 'Paragraph Font Size (px)', 'number');
+        $this->add_settings_field('policy_text_font_size', 'Policy Text Font Size (px)', 'number');
+
+        // New fields for accept and decline buttons
+        $this->add_settings_field('accept_button_bg_color', 'Accept Button Background Color', 'color');
+        $this->add_settings_field('accept_button_text_color', 'Accept Button Text Color', 'color');
+        $this->add_settings_field('accept_button_font_size', 'Accept Button Font Size (px)', 'number');
+        
+        $this->add_settings_field('decline_button_bg_color', 'Decline Button Background Color', 'color');
+        $this->add_settings_field('decline_button_text_color', 'Decline Button Text Color', 'color');
+        $this->add_settings_field('decline_button_font_size', 'Decline Button Font Size (px)', 'number');
+        
+
     }
 
     private function add_settings_field($id, $label, $type = 'text') {
@@ -75,6 +95,9 @@ class ACP_Admin {
             case 'select':
                 $this->popup_position_field_callback($value);
                 break;
+            case 'color':
+                echo '<input type="color" name="' . $this->option_name . '[' . $id . ']" value="' . esc_attr($value) . '">';
+                break;
             default:
                 echo '<input type="text" name="' . $this->option_name . '[' . $id . ']" value="' . esc_attr($value) . '" class="regular-text">';
         }
@@ -82,18 +105,50 @@ class ACP_Admin {
 
     public function validate_options($input) {
         $valid = array();
-        $fields = array(
-            'popup_title', 'cookie_message', 'accept_button_text', 'decline_button_text',
-            'policy_link_text', 'policy_url', 'cookie_expiry', 'popup_position'
-        );
+        $options = $this->get_settings_fields();
 
-        foreach ($fields as $field) {
-            if (isset($input[$field])) {
-                $valid[$field] = $field === 'cookie_expiry' ? intval($input[$field]) : sanitize_text_field($input[$field]);
+        foreach ($options as $option) {
+            $id = $option['id'];
+            if (isset($input[$id])) {
+                switch ($option['type']) {
+                    case 'number':
+                        $valid[$id] = intval($input[$id]);
+                        break;
+                    case 'color':
+                        $valid[$id] = sanitize_hex_color($input[$id]);
+                        break;
+                    default:
+                        $valid[$id] = sanitize_text_field($input[$id]);
+                }
             }
         }
 
         return $valid;
+    }
+
+    private function get_settings_fields() {
+        return array(
+            array('id' => 'popup_title', 'type' => 'text'),
+            array('id' => 'cookie_message', 'type' => 'textarea'),
+            array('id' => 'accept_button_text', 'type' => 'text'),
+            array('id' => 'decline_button_text', 'type' => 'text'),
+            array('id' => 'policy_link_text', 'type' => 'text'),
+            array('id' => 'policy_url', 'type' => 'text'),
+            array('id' => 'cookie_expiry', 'type' => 'number'),
+            array('id' => 'popup_position', 'type' => 'select'),
+            array('id' => 'banner_bg_color', 'type' => 'color'),
+            array('id' => 'banner_text_color', 'type' => 'color'),
+            array('id' => 'font_size', 'type' => 'number'),
+            array('id' => 'accept_button_bg_color', 'type' => 'color'),
+            array('id' => 'accept_button_text_color', 'type' => 'color'),
+            array('id' => 'accept_button_font_size', 'type' => 'number'),
+            array('id' => 'decline_button_bg_color', 'type' => 'color'),
+            array('id' => 'decline_button_text_color', 'type' => 'color'),
+            array('id' => 'decline_button_font_size', 'type' => 'number'),
+            array('id' => 'heading_font_size', 'type' => 'number'),
+            array('id' => 'paragraph_font_size', 'type' => 'number'),
+            array('id' => 'policy_text_font_size', 'type' => 'number'),
+        );
     }
 
     public function settings_section_callback() {

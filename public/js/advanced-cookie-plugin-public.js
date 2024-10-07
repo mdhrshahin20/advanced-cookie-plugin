@@ -2,22 +2,18 @@
     'use strict';
 
     $(document).ready(function() {
-        setTimeout(function() {
-            $('#acp-cookie-popup').slideDown(300);
-        }, 1000);
+        if (!getCookie('advanced_cookie_consent')) {
+            $('#acp-cookie-popup').show();
+        }
 
         $('#acp-accept-cookies').on('click', function() {
             setCookie('advanced_cookie_consent', 'accepted', acpData.cookie_expiry);
-            closeCookiePopup();
+            $('#acp-cookie-popup').hide();
         });
 
         $('#acp-decline-cookies').on('click', function() {
             setCookie('advanced_cookie_consent', 'declined', acpData.cookie_expiry);
-            closeCookiePopup();
-        });
-
-        $('.acp-cookie-policy-link').on('click', function(e) {
-            // The URL is now set in the HTML, so we don't need to handle it here
+            $('#acp-cookie-popup').hide();
         });
     });
 
@@ -28,13 +24,18 @@
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             expires = "; expires=" + date.toUTCString();
         }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Strict; Secure";
+        document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
     }
 
-    function closeCookiePopup() {
-        $('#acp-cookie-popup').slideUp(300, function() {
-            $(this).remove();
-        });
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
     }
 
 })(jQuery);
