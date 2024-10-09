@@ -19,12 +19,18 @@
                     <div class="acp-cookie-content">
                         <div class="acp-cookie-text">
                             <h3 id="preview-title" class="acp-cookie-title">Cookie Consent</h3>
-                            <p id="preview-message" class="acp-cookie-message">This website uses cookies to improve your experience.</p>
+                            
+                            <p >
+                               <span id="preview-message" class="acp-cookie-message">
+                                This website uses cookies to improve your experience.
+                               </span>
+                               <a id="preview-policy" href="#" class="acp-cookie-policy-link" target="_blank">View Cookie Policy</a>
+                             </p>
+
                         </div>
                         <div class="acp-cookie-actions">
                             <button id="preview-accept" class="acp-button acp-accept">Accept</button>
                             <button id="preview-decline" class="acp-button acp-decline">Decline</button>
-                            <a id="preview-policy" href="#" class="acp-cookie-policy-link" target="_blank">View Cookie Policy</a>
                         </div>
                     </div>
                 </div>

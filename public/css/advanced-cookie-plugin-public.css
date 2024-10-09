@@ -102,7 +102,7 @@
 
 .acp-cookie-policy-link {
     text-decoration: underline;
-    margin-left: 20px;
+    /* margin-left: 20px; */
     transition: opacity 0.3s ease;
 }
 

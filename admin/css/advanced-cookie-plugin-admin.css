@@ -22,7 +22,14 @@ textarea {
 #acp-admin-preview .acp-cookie-popup {
     position: relative;
     display: block;
+    font-family: sans-serif !important;
 }
+.acp-button.acp-accept,
+.acp-button.acp-decline {
+    font-family: sans-serif !important;
+    font-weight: bold;
+}
+
 
 .acp-admin-container {
     display: flex;
@@ -67,14 +74,21 @@ textarea {
 }
 
 .acp-button {
-    margin: 5px;
-    padding: 5px 10px;
-    border: none;
+        display: inline-block;
+    padding: 8px 15px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    transition: opacity 0.3s ease;
+    margin-left: 10px;
 }
 
 .acp-cookie-policy-link {
     margin: 5px;
+	color: #CC3366;
 }
 
 #acp-debug-info {
